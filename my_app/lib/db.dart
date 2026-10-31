@@ -92,7 +92,7 @@ class AppDb {
         'restaurant_id': rid,
         'items': items,
         'subtotal': subtotal,
-        'delivery_fee': fee
+        'delivery_fee': fee,
         'tip_percent': tip,
         'status': status.index,
         'date': now.subtract(Duration(days: daysAgo)).millisecondsSinceEpoch,

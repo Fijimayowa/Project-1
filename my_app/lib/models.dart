@@ -2,15 +2,15 @@ enum OrderStatus { placed, preparing, onTheWay, delivered }
 
 extension OrderStatusX on OrderStatus {
   String get label => switch (this) {
-        OrderStatus.placed => 'Placed',
-        OrderStatus.preparing => 'Preparing',
-        OrderStatus.onTheWay => 'On the way',
-        OrderStatus.delivered => 'Delivered',
-      };
+    OrderStatus.placed => 'Placed',
+    OrderStatus.preparing => 'Preparing',
+    OrderStatus.onTheWay => 'On the way',
+    OrderStatus.delivered => 'Delivered',
+  };
 }
 
 class Restaurant {
-  final int? id;
+  final int? id; //
   final String name;
   final String cuisine;
   final double deliveryFee;
@@ -32,18 +32,18 @@ class Restaurant {
   }
 
   Map<String, Object?> toMap() => {
-        'id': id,
-        'name': name,
-        'cuisine': cuisine,
-        'delivery_fee': deliveryFee,
-      };
+    'id': id,
+    'name': name,
+    'cuisine': cuisine,
+    'delivery_fee': deliveryFee,
+  };
 
   factory Restaurant.fromMap(Map<String, Object?> m) => Restaurant(
-        id: m['id'] as int,
-        name: m['name'] as String,
-        cuisine: m['cuisine'] as String,
-        deliveryFee: (m['delivery_fee'] as num).toDouble(),
-      );
+    id: m['id'] as int,
+    name: m['name'] as String,
+    cuisine: m['cuisine'] as String,
+    deliveryFee: (m['delivery_fee'] as num).toDouble(),
+  );
 }
 
 class Order {
@@ -71,37 +71,37 @@ class Order {
   double get total => subtotal + deliveryFee + tip;
 
   Order copyWith({int? tipPercent, OrderStatus? status}) => Order(
-        id: id,
-        restaurantId: restaurantId,
-        items: items,
-        subtotal: subtotal,
-        deliveryFee: deliveryFee,
-        tipPercent: tipPercent ?? this.tipPercent,
-        status: status ?? this.status,
-        date: date,
-      );
+    id: id,
+    restaurantId: restaurantId,
+    items: items,
+    subtotal: subtotal,
+    deliveryFee: deliveryFee,
+    tipPercent: tipPercent ?? this.tipPercent,
+    status: status ?? this.status,
+    date: date,
+  );
 
   Map<String, Object?> toMap() => {
-        'id': id,
-        'restaurant_id': restaurantId,
-        'items': items,
-        'subtotal': subtotal,
-        'delivery_fee': deliveryFee,
-        'tip_percent': tipPercent,
-        'status': status.index,
-        'date': date.millisecondsSinceEpoch,
-      };
+    'id': id,
+    'restaurant_id': restaurantId,
+    'items': items,
+    'subtotal': subtotal,
+    'delivery_fee': deliveryFee,
+    'tip_percent': tipPercent,
+    'status': status.index,
+    'date': date.millisecondsSinceEpoch,
+  };
 
   factory Order.fromMap(Map<String, Object?> m) => Order(
-        id: m['id'] as int,
-        restaurantId: m['restaurant_id'] as int,
-        items: m['items'] as String,
-        subtotal: (m['subtotal'] as num).toDouble(),
-        deliveryFee: (m['delivery_fee'] as num).toDouble(),
-        tipPercent: m['tip_percent'] as int,
-        status: OrderStatus.values[m['status'] as int],
-        date: DateTime.fromMillisecondsSinceEpoch(m['date'] as int),
-      );
+    id: m['id'] as int,
+    restaurantId: m['restaurant_id'] as int,
+    items: m['items'] as String,
+    subtotal: (m['subtotal'] as num).toDouble(),
+    deliveryFee: (m['delivery_fee'] as num).toDouble(),
+    tipPercent: m['tip_percent'] as int,
+    status: OrderStatus.values[m['status'] as int],
+    date: DateTime.fromMillisecondsSinceEpoch(m['date'] as int),
+  );
 }
 
 String money(double v) => '\$${v.toStringAsFixed(2)}';

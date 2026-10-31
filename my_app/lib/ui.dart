@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'models.dart';
 
-// ---------- Background photos ----------
+// Image files used behind the app's screens.
 const kKitchenBg = 'assets/images/bg_kitchen.jpg';
 const kBurgersBg = 'assets/images/bg_burgers.jpg';
 const kSushiBg = 'assets/images/bg_sushi.jpg';
 
-/// Picks a background photo that fits the restaurant.
+// Pick a background image based on the restaurant's name or cuisine.
 String backgroundFor(Restaurant r) {
   final n = r.name.toLowerCase();
   if (n.contains('sushi') || r.cuisine == 'Japanese') return kSushiBg;
@@ -15,21 +15,19 @@ String backgroundFor(Restaurant r) {
   return kKitchenBg;
 }
 
+// Return an icon for each cuisine type.
 IconData cuisineIcon(String cuisine) => switch (cuisine) {
-      'All' => Icons.restaurant_menu,
-      'American' => Icons.fastfood,
-      'Japanese' => Icons.ramen_dining,
-      'Mexican' => Icons.lunch_dining,
-      'Italian' => Icons.local_pizza,
-      'Indian' => Icons.dinner_dining,
-      'Chinese' => Icons.rice_bowl,
-      _ => Icons.restaurant,
-    };
+  'All' => Icons.restaurant_menu,
+  'American' => Icons.fastfood,
+  'Japanese' => Icons.ramen_dining,
+  'Mexican' => Icons.lunch_dining,
+  'Italian' => Icons.local_pizza,
+  'Indian' => Icons.dinner_dining,
+  'Chinese' => Icons.rice_bowl,
+  _ => Icons.restaurant,
+};
 
-// =====================================================================
-// StatelessWidget: full-screen photo with a dark layer on top.
-// Put a transparent Scaffold inside; text outside cards should be white.
-// =====================================================================
+// Show a full-screen photo, darken it, and place content on top.
 class PhotoBackground extends StatelessWidget {
   final String asset;
   final Widget child;
@@ -54,9 +52,7 @@ class PhotoBackground extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: restaurant logo on a white tile (or its first letter)
-// =====================================================================
+// Show the restaurant logo, or its first letter if no logo is set.
 class RestaurantLogo extends StatelessWidget {
   final Restaurant restaurant;
   final double? width;
@@ -74,8 +70,9 @@ class RestaurantLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final logo = restaurant.logoAsset;
-    final initial =
-        restaurant.name.isEmpty ? '?' : restaurant.name[0].toUpperCase();
+    final initial = restaurant.name.isEmpty
+        ? '?'
+        : restaurant.name[0].toUpperCase();
     return Container(
       width: width,
       height: height,
@@ -101,9 +98,7 @@ class RestaurantLogo extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: restaurant card (big logo on top, like DoorDash)
-// =====================================================================
+// Show a restaurant card with details and edit/delete options.
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
   final VoidCallback onTap;
@@ -148,8 +143,9 @@ class RestaurantCard extends StatelessWidget {
                       children: [
                         Text(
                           restaurant.name,
-                          style: text.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: text.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
@@ -176,9 +172,7 @@ class RestaurantCard extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: restaurant tile for the grid view
-// =====================================================================
+// Show a compact restaurant card for a grid.
 class RestaurantGridTile extends StatelessWidget {
   final Restaurant restaurant;
   final VoidCallback onTap;
@@ -219,7 +213,9 @@ class RestaurantGridTile extends StatelessWidget {
                     restaurant.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: text.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                    style: text.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     '${restaurant.cuisine} • ${money(restaurant.deliveryFee)}',
@@ -237,9 +233,7 @@ class RestaurantGridTile extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: card in the "Your past orders" carousel
-// =====================================================================
+// Show a past order with the restaurant, items, total, and status.
 class PastOrderCard extends StatelessWidget {
   final Order order;
   final Restaurant restaurant;
@@ -280,8 +274,9 @@ class PastOrderCard extends StatelessWidget {
                       restaurant.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: text.titleSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: text.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       order.items,
@@ -304,9 +299,7 @@ class PastOrderCard extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: round category icon + label (like DoorDash's row)
-// =====================================================================
+// Show a cuisine category button and highlight it when selected.
 class CategoryItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -360,12 +353,10 @@ class CategoryItem extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: order tile (shows the restaurant logo when given)
-// =====================================================================
+// Show an order's details, with optional restaurant and delete button.
 class OrderTile extends StatelessWidget {
   final Order order;
-  final Restaurant? restaurant; // shown on the History screen
+  final Restaurant? restaurant;
   final bool selected;
   final VoidCallback onTap;
   final VoidCallback? onDelete;
@@ -398,8 +389,10 @@ class OrderTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(money(order.total),
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              money(order.total),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             if (onDelete != null)
               IconButton(
                 icon: const Icon(Icons.delete_outline),
@@ -415,9 +408,7 @@ class OrderTile extends StatelessWidget {
   }
 }
 
-// =====================================================================
-// StatelessWidget: red background shown while swiping to delete
-// =====================================================================
+// Red background shown behind an order when it can be deleted.
 class DeleteBackground extends StatelessWidget {
   const DeleteBackground({super.key});
 
