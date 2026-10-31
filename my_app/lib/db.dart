@@ -76,7 +76,7 @@ class AppDb {
       await db.insert('orders', {
         'restaurant_id': rid,
         'items': items,
-        'subtotal': subtotal,
+        'subtotal': subtotal
         'delivery_fee': fee,
         'tip_percent': tip,
         'status': status.index,
