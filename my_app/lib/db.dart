@@ -50,10 +50,18 @@ class AppDb {
       // Version 2: the demo restaurants got real names (and logos).
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
-          await db.update('restaurants', {'name': 'Burger King'},
-              where: 'name = ?', whereArgs: ['Burger Barn']);
-          await db.update('restaurants', {'name': 'Taco Bell'},
-              where: 'name = ?', whereArgs: ['Taco Town']);
+          await db.update(
+            'restaurants',
+            {'name': 'Burger King'},
+            where: 'name = ?',
+            whereArgs: ['Burger Barn'],
+          );
+          await db.update(
+            'restaurants',
+            {'name': 'Taco Bell'},
+            where: 'name = ?',
+            whereArgs: ['Taco Town'],
+          );
         }
       },
     );
@@ -71,12 +79,19 @@ class AppDb {
       });
     }
 
-    Future<void> addOrder(int rid, String items, double subtotal, double fee,
-        int tip, OrderStatus status, int daysAgo) async {
+    Future<void> addOrder(
+      int rid,
+      String items,
+      double subtotal,
+      double fee,
+      int tip,
+      OrderStatus status,
+      int daysAgo,
+    ) async {
       await db.insert('orders', {
         'restaurant_id': rid,
         'items': items,
-        'subtotal': subtotal
+        'subtotal': subtotal,
         'delivery_fee': fee,
         'tip_percent': tip,
         'status': status.index,
@@ -85,22 +100,64 @@ class AppDb {
     }
 
     final burger = await addRestaurant('Burger King', 'American', 2.99);
-    await addOrder(burger, 'Cheeseburger, Fries', 14.50, 2.99, 15,
-        OrderStatus.delivered, 10);
-    await addOrder(burger, 'Double Burger, Milkshake', 18.75, 2.99, 18,
-        OrderStatus.delivered, 3);
+    await addOrder(
+      burger,
+      'Cheeseburger, Fries',
+      14.50,
+      2.99,
+      15,
+      OrderStatus.delivered,
+      10,
+    );
+    await addOrder(
+      burger,
+      'Double Burger, Milkshake',
+      18.75,
+      2.99,
+      18,
+      OrderStatus.delivered,
+      3,
+    );
 
     final sushi = await addRestaurant('Sushi Spot', 'Japanese', 3.99);
-    await addOrder(sushi, 'Salmon Roll, Miso Soup', 21.00, 3.99, 20,
-        OrderStatus.delivered, 8);
-    await addOrder(sushi, 'Dragon Roll, Edamame', 16.50, 3.99, 15,
-        OrderStatus.onTheWay, 0);
+    await addOrder(
+      sushi,
+      'Salmon Roll, Miso Soup',
+      21.00,
+      3.99,
+      20,
+      OrderStatus.delivered,
+      8,
+    );
+    await addOrder(
+      sushi,
+      'Dragon Roll, Edamame',
+      16.50,
+      3.99,
+      15,
+      OrderStatus.onTheWay,
+      0,
+    );
 
     final taco = await addRestaurant('Taco Bell', 'Mexican', 1.99);
-    await addOrder(taco, '3 Tacos, Chips and Salsa', 12.25, 1.99, 15,
-        OrderStatus.delivered, 6);
-    await addOrder(taco, 'Burrito Bowl', 11.00, 1.99, 10,
-        OrderStatus.preparing, 1);
+    await addOrder(
+      taco,
+      '3 Tacos, Chips and Salsa',
+      12.25,
+      1.99,
+      15,
+      OrderStatus.delivered,
+      6,
+    );
+    await addOrder(
+      taco,
+      'Burrito Bowl',
+      11.00,
+      1.99,
+      10,
+      OrderStatus.preparing,
+      1,
+    );
   }
 
   void _changed() => version.value++;
@@ -114,8 +171,11 @@ class AppDb {
 
   Future<Restaurant?> restaurant(int id) async {
     final db = await _database;
-    final rows =
-        await db.query('restaurants', where: 'id = ?', whereArgs: [id]);
+    final rows = await db.query(
+      'restaurants',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
     return rows.isEmpty ? null : Restaurant.fromMap(rows.first);
   }
 
@@ -124,8 +184,12 @@ class AppDb {
     if (r.id == null) {
       await db.insert('restaurants', r.toMap()..remove('id'));
     } else {
-      await db.update('restaurants', r.toMap(),
-          where: 'id = ?', whereArgs: [r.id]);
+      await db.update(
+        'restaurants',
+        r.toMap(),
+        where: 'id = ?',
+        whereArgs: [r.id],
+      );
     }
     _changed();
   }
@@ -140,7 +204,9 @@ class AppDb {
   Future<int> orderCountFor(int restaurantId) async {
     final db = await _database;
     final result = await db.rawQuery(
-        'SELECT COUNT(*) FROM orders WHERE restaurant_id = ?', [restaurantId]);
+      'SELECT COUNT(*) FROM orders WHERE restaurant_id = ?',
+      [restaurantId],
+    );
     return Sqflite.firstIntValue(result) ?? 0;
   }
 
